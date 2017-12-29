@@ -69,7 +69,7 @@ final class UrbIS extends AbstractHttpProvider implements Provider
         }
 
         $url = sprintf(self::GEOCODE_ENDPOINT_URL, urlencode($language), urlencode($address));
-        $json = $this->executeQuery($url, $query->getLimit());
+        $json = $this->executeQuery($url);
 
         // no result
         if (empty($json->result)) {
