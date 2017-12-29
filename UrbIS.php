@@ -16,14 +16,13 @@ use Geocoder\Collection;
 use Geocoder\Exception\InvalidArgument;
 use Geocoder\Exception\InvalidServerResponse;
 use Geocoder\Exception\UnsupportedOperation;
+use Geocoder\Http\Provider\AbstractHttpProvider;
 use Geocoder\Model\Address;
 use Geocoder\Model\AddressCollection;
+use Geocoder\Provider\Provider;
 use Geocoder\Query\GeocodeQuery;
 use Geocoder\Query\ReverseQuery;
-use Geocoder\Http\Provider\AbstractHttpProvider;
-use Geocoder\Provider\Provider;
 use Http\Client\HttpClient;
-use Locale;
 
 /**
  * @author Jonathan Beliën <jbe@geo6.be>
@@ -41,7 +40,7 @@ final class UrbIS extends AbstractHttpProvider implements Provider
     const REVERSE_ENDPOINT_URL = 'http://service.gis.irisnet.be/urbis/Rest/Localize/getaddressfromxy?json=%s';
 
     /**
-     * @param HttpClient $client  an HTTP adapter
+     * @param HttpClient $client an HTTP adapter
      */
     public function __construct(HttpClient $client)
     {
@@ -66,7 +65,7 @@ final class UrbIS extends AbstractHttpProvider implements Provider
 
         $language = '';
         if (preg_match('/^(fr|nl).*$/', $query->getLocale(), $matches) === 1) {
-          $language = $matches[1];
+            $language = $matches[1];
         }
 
         $url = sprintf(self::GEOCODE_ENDPOINT_URL, urlencode($language), urlencode($address));
@@ -76,7 +75,6 @@ final class UrbIS extends AbstractHttpProvider implements Provider
         if (empty($json->result)) {
             return new AddressCollection([]);
         }
-
 
         $results = [];
         foreach ($json->result as $location) {
@@ -88,22 +86,22 @@ final class UrbIS extends AbstractHttpProvider implements Provider
             $countryCode = 'BE';
 
             $bounds = [
-              'west' => $location->extent->xmin,
+              'west'  => $location->extent->xmin,
               'south' => $location->extent->ymin,
-              'east' => $location->extent->xmax,
-              'north' => $location->extent->ymax
+              'east'  => $location->extent->xmax,
+              'north' => $location->extent->ymax,
             ];
 
             $results[] = Address::createFromArray([
-                'providedBy' => $this->getName(),
-                'latitude' =>  $coordinates->y,
-                'longitude' => $coordinates->x,
+                'providedBy'   => $this->getName(),
+                'latitude'     => $coordinates->y,
+                'longitude'    => $coordinates->x,
                 'streetNumber' => $number,
-                'streetName' => $streetName,
-                'locality' => $municipality,
-                'postalCode' => $postCode,
-                'countryCode' => $countryCode,
-                'bounds' => $bounds
+                'streetName'   => $streetName,
+                'locality'     => $municipality,
+                'postalCode'   => $postCode,
+                'countryCode'  => $countryCode,
+                'bounds'       => $bounds,
             ]);
         }
 
@@ -126,7 +124,7 @@ final class UrbIS extends AbstractHttpProvider implements Provider
     }
 
     /**
-     * @param string      $url
+     * @param string $url
      *
      * @return \stdClass
      */
@@ -138,6 +136,7 @@ final class UrbIS extends AbstractHttpProvider implements Provider
         if (!isset($json)) {
             throw InvalidServerResponse::create($url);
         }
+
         return $json;
     }
 }
