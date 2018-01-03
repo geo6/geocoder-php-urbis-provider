@@ -113,35 +113,35 @@ final class UrbIS extends AbstractHttpProvider implements Provider
      */
     public function reverseQuery(ReverseQuery $query): Collection
     {
-      $coordinates = $query->getCoordinates();
+        $coordinates = $query->getCoordinates();
 
-      $jsonQuery = [
+        $jsonQuery = [
           'language' => $query->getLocale(),
-          'point' => [
+          'point'    => [
               'x' => $coordinates->getLongitude(),
-              'y' => $coordinates->getLatitude()
+              'y' => $coordinates->getLatitude(),
           ],
-          'spatialReference' => 4326
+          'spatialReference' => 4326,
       ];
 
-      $url = sprintf(self::REVERSE_ENDPOINT_URL, urlencode(json_encode($jsonQuery)));
-      $json = $this->executeQuery($url);
+        $url = sprintf(self::REVERSE_ENDPOINT_URL, urlencode(json_encode($jsonQuery)));
+        $json = $this->executeQuery($url);
 
-      // no result
-      if (empty($json->result)) {
-          return new AddressCollection([]);
-      }
+        // no result
+        if (empty($json->result)) {
+            return new AddressCollection([]);
+        }
 
-      $results = [];
-      $location = $json->result;
-      $coordinates = $location->point;
-      $streetName = !empty($location->address->street->name) ? $location->address->street->name : null;
-      $number = !empty($location->address->number) ? $location->address->number : null;
-      $municipality = !empty($location->address->street->municipality) ? $location->address->street->municipality : null;
-      $postCode = !empty($location->address->street->postCode) ? $location->address->street->postCode : null;
-      $countryCode = 'BE';
+        $results = [];
+        $location = $json->result;
+        $coordinates = $location->point;
+        $streetName = !empty($location->address->street->name) ? $location->address->street->name : null;
+        $number = !empty($location->address->number) ? $location->address->number : null;
+        $municipality = !empty($location->address->street->municipality) ? $location->address->street->municipality : null;
+        $postCode = !empty($location->address->street->postCode) ? $location->address->street->postCode : null;
+        $countryCode = 'BE';
 
-      $results[] = Address::createFromArray([
+        $results[] = Address::createFromArray([
           'providedBy'   => $this->getName(),
           'latitude'     => $coordinates->y,
           'longitude'    => $coordinates->x,
@@ -152,7 +152,7 @@ final class UrbIS extends AbstractHttpProvider implements Provider
           'countryCode'  => $countryCode,
       ]);
 
-      return new AddressCollection($results);
+        return new AddressCollection($results);
     }
 
     /**
