@@ -32,12 +32,12 @@ final class UrbIS extends AbstractHttpProvider implements Provider
     /**
      * @var string
      */
-    const GEOCODE_ENDPOINT_URL = 'http://service.gis.irisnet.be/urbis/Rest/Localize/getaddresses?spatialReference=4326&language=%s&address=%s';
+    const GEOCODE_ENDPOINT_URL = 'http://geoservices.irisnet.be/localization/Rest/Localize/getaddresses?spatialReference=4326&language=%s&address=%s';
 
     /**
      * @var string
      */
-    const REVERSE_ENDPOINT_URL = 'http://service.gis.irisnet.be/urbis/Rest/Localize/getaddressfromxy?json=%s';
+    const REVERSE_ENDPOINT_URL = 'http://geoservices.irisnet.be/localization/Rest/Localize/getaddressfromxy?json=%s';
 
     /**
      * @param HttpClient $client an HTTP adapter
@@ -114,14 +114,15 @@ final class UrbIS extends AbstractHttpProvider implements Provider
     public function reverseQuery(ReverseQuery $query): Collection
     {
         $coordinates = $query->getCoordinates();
+        $language = $query->getLocale()??'fr';
 
         $jsonQuery = [
-          'language' => $query->getLocale(),
+          'language' => $language,
           'point'    => [
-              'x' => $coordinates->getLongitude(),
-              'y' => $coordinates->getLatitude(),
+              'y' => $coordinates->getLongitude(),
+              'x' => $coordinates->getLatitude(),
           ],
-          'spatialReference' => 4326,
+          'SRS_In' => 4326,
       ];
 
         $url = sprintf(self::REVERSE_ENDPOINT_URL, urlencode(json_encode($jsonQuery)));
