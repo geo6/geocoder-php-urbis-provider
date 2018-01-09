@@ -119,6 +119,7 @@ final class UrbIS extends AbstractHttpProvider implements Provider
         $jsonQuery = [
           'language' => $language,
           'point'    => [
+              // x, y are switched in the API
               'y' => $coordinates->getLongitude(),
               'x' => $coordinates->getLatitude(),
           ],
