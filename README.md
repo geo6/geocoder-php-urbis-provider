@@ -12,7 +12,7 @@
 This is the "UrbIS" provider for the [Geocoder PHP](https://github.com/geocoder-php/Geocoder).
 
 **Coverage:** Brussels (Belgium)  
-**API:** <http://gis.irisnet.be/urbis/>
+**API:** <http://geoservices.irisnet.be/localization/>
 
 ## Install
 
