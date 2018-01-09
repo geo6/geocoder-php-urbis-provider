@@ -32,12 +32,12 @@ final class UrbIS extends AbstractHttpProvider implements Provider
     /**
      * @var string
      */
-    const GEOCODE_ENDPOINT_URL = 'http://geoservices.irisnet.be/localization/Rest/Localize/getaddresses?spatialReference=4326&language=%s&address=%s';
+    const GEOCODE_ENDPOINT_URL = 'https://geoservices.irisnet.be/localization/Rest/Localize/getaddresses?spatialReference=4326&language=%s&address=%s';
 
     /**
      * @var string
      */
-    const REVERSE_ENDPOINT_URL = 'http://geoservices.irisnet.be/localization/Rest/Localize/getaddressfromxy?json=%s';
+    const REVERSE_ENDPOINT_URL = 'https://geoservices.irisnet.be/localization/Rest/Localize/getaddressfromxy?json=%s';
 
     /**
      * @param HttpClient $client an HTTP adapter
