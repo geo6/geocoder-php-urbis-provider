@@ -64,7 +64,7 @@ final class UrbIS extends AbstractHttpProvider implements Provider
         }
 
         $language = '';
-        if (preg_match('/^(fr|nl).*$/', $query->getLocale(), $matches) === 1) {
+        if (!is_null($query->getLocale()) && preg_match('/^(fr|nl).*$/', $query->getLocale(), $matches) === 1) {
             $language = $matches[1];
         }
 
