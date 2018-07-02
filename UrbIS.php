@@ -18,6 +18,7 @@ use Geocoder\Exception\InvalidServerResponse;
 use Geocoder\Exception\UnsupportedOperation;
 use Geocoder\Http\Provider\AbstractHttpProvider;
 use Geocoder\Model\Address;
+use Geocoder\Model\AddressBuilder;
 use Geocoder\Model\AddressCollection;
 use Geocoder\Provider\Provider;
 use Geocoder\Query\GeocodeQuery;
@@ -78,31 +79,20 @@ final class UrbIS extends AbstractHttpProvider implements Provider
 
         $results = [];
         foreach ($json->result as $location) {
-            $coordinates = $location->point;
             $streetName = !empty($location->address->street->name) ? $location->address->street->name : null;
             $number = !empty($location->address->number) ? $location->address->number : null;
             $municipality = !empty($location->address->street->municipality) ? $location->address->street->municipality : null;
             $postCode = !empty($location->address->street->postCode) ? $location->address->street->postCode : null;
-            $countryCode = 'BE';
 
-            $bounds = [
-              'west'  => $location->extent->xmin,
-              'south' => $location->extent->ymin,
-              'east'  => $location->extent->xmax,
-              'north' => $location->extent->ymax,
-            ];
+            $builder = new AddressBuilder($this->getName());
+            $builder->setCoordinates($location->point->y, $location->point->x)
+                ->setStreetNumber($number)
+                ->setStreetName($streetName)
+                ->setLocality($municipality)
+                ->setPostalCode($postCode)
+                ->setBounds($location->extent->ymin, $location->extent->xmin, $location->extent->ymax, $location->extent->xmax);
 
-            $results[] = Address::createFromArray([
-                'providedBy'   => $this->getName(),
-                'latitude'     => $coordinates->y,
-                'longitude'    => $coordinates->x,
-                'streetNumber' => $number,
-                'streetName'   => $streetName,
-                'locality'     => $municipality,
-                'postalCode'   => $postCode,
-                'countryCode'  => $countryCode,
-                'bounds'       => $bounds,
-            ]);
+            $results[] = $builder->build();
         }
 
         return new AddressCollection($results);
@@ -136,23 +126,20 @@ final class UrbIS extends AbstractHttpProvider implements Provider
 
         $results = [];
         $location = $json->result;
-        $coordinates = $location->point;
+
         $streetName = !empty($location->address->street->name) ? $location->address->street->name : null;
         $number = !empty($location->address->number) ? $location->address->number : null;
         $municipality = !empty($location->address->street->municipality) ? $location->address->street->municipality : null;
         $postCode = !empty($location->address->street->postCode) ? $location->address->street->postCode : null;
-        $countryCode = 'BE';
 
-        $results[] = Address::createFromArray([
-          'providedBy'   => $this->getName(),
-          'latitude'     => $coordinates->y,
-          'longitude'    => $coordinates->x,
-          'streetNumber' => $number,
-          'streetName'   => $streetName,
-          'locality'     => $municipality,
-          'postalCode'   => $postCode,
-          'countryCode'  => $countryCode,
-      ]);
+        $builder = new AddressBuilder($this->getName());
+        $builder->setCoordinates($location->point->y, $location->point->x)
+            ->setStreetNumber($number)
+            ->setStreetName($streetName)
+            ->setLocality($municipality)
+            ->setPostalCode($postCode);
+
+        $results[] = $builder->build();
 
         return new AddressCollection($results);
     }
