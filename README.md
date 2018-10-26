@@ -1,5 +1,6 @@
 # :belgium: [Geocoder PHP](https://github.com/geocoder-php/Geocoder) "UrbIS" provider
 
+[![Build Status](https://travis-ci.org/geo6/geocoder-php-urbis-provider.svg?branch=master)](https://travis-ci.org/geo6/geocoder-php-urbis-provider)
 [![Latest Stable Version](https://poser.pugx.org/geo6/geocoder-php-urbis-provider/v/stable)](https://packagist.org/packages/geo6/geocoder-php-urbis-provider)
 [![Total Downloads](https://poser.pugx.org/geo6/geocoder-php-urbis-provider/downloads)](https://packagist.org/packages/geo6/geocoder-php-urbis-provider)
 [![Monthly Downloads](https://poser.pugx.org/geo6/geocoder-php-urbis-provider/d/monthly.png)](https://packagist.org/packages/geo6/geocoder-php-urbis-provider)
