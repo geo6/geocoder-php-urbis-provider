@@ -24,39 +24,36 @@ class UrbISTest extends BaseTestCase
         return __DIR__.'/.cached_responses';
     }
 
-    /**
-     * @expectedException \Geocoder\Exception\UnsupportedOperation
-     * @expectedExceptionMessage The UrbIS provider does not support IP addresses, only street addresses.
-     */
     public function testGeocodeWithLocalhostIPv4()
     {
-        $provider = new UrbIS($this->getMockedHttpClient(), 'Geocoder PHP/UrbIS Provider/UrbIS Test');
+        $this->expectException(\Geocoder\Exception\UnsupportedOperation::class);
+        $this->expectExceptionMessage('The UrbIS provider does not support IP addresses, only street addresses.');
+
+        $provider = new UrbIS($this->getMockedHttpClient());
         $provider->geocodeQuery(GeocodeQuery::create('127.0.0.1'));
     }
 
-    /**
-     * @expectedException \Geocoder\Exception\UnsupportedOperation
-     * @expectedExceptionMessage The UrbIS provider does not support IP addresses, only street addresses.
-     */
     public function testGeocodeWithLocalhostIPv6()
     {
-        $provider = new UrbIS($this->getMockedHttpClient(), 'Geocoder PHP/UrbIS Provider/UrbIS Test');
+        $this->expectException(\Geocoder\Exception\UnsupportedOperation::class);
+        $this->expectExceptionMessage('The UrbIS provider does not support IP addresses, only street addresses.');
+
+        $provider = new UrbIS($this->getMockedHttpClient());
         $provider->geocodeQuery(GeocodeQuery::create('::1'));
     }
 
-    /**
-     * @expectedException \Geocoder\Exception\UnsupportedOperation
-     * @expectedExceptionMessage The UrbIS provider does not support IP addresses, only street addresses.
-     */
     public function testGeocodeWithRealIPv6()
     {
-        $provider = new UrbIS($this->getMockedHttpClient(), 'Geocoder PHP/UrbIS Provider/UrbIS Test');
+        $this->expectException(\Geocoder\Exception\UnsupportedOperation::class);
+        $this->expectExceptionMessage('The UrbIS provider does not support IP addresses, only street addresses.');
+
+        $provider = new UrbIS($this->getMockedHttpClient());
         $provider->geocodeQuery(GeocodeQuery::create('::ffff:88.188.221.14'));
     }
 
     public function testReverseQuery()
     {
-        $provider = new UrbIS($this->getHttpClient(), 'Geocoder PHP/UrbIS Provider/UrbIS Test');
+        $provider = new UrbIS($this->getHttpClient());
         $results = $provider->reverseQuery(ReverseQuery::fromCoordinates(50.841973, 4.362288)->withLocale('fr'));
 
         $this->assertInstanceOf('Geocoder\Model\AddressCollection', $results);
@@ -73,7 +70,7 @@ class UrbISTest extends BaseTestCase
 
     public function testGeocodeQuery()
     {
-        $provider = new UrbIS($this->getHttpClient(), 'Geocoder PHP/UrbIS Provider/UrbIS Test');
+        $provider = new UrbIS($this->getHttpClient());
         $results = $provider->geocodeQuery(GeocodeQuery::create('1 Place des Palais 1000 Bruxelles')->withLocale('fr'));
 
         $this->assertInstanceOf('Geocoder\Model\AddressCollection', $results);
@@ -82,8 +79,8 @@ class UrbISTest extends BaseTestCase
         /** @var \Geocoder\Model\Address $result */
         $result = $results->first();
         $this->assertInstanceOf('\Geocoder\Model\Address', $result);
-        $this->assertEquals(50.841973, $result->getCoordinates()->getLatitude(), '', 0.00001);
-        $this->assertEquals(4.362288, $result->getCoordinates()->getLongitude(), '', 0.00001);
+        $this->assertEqualsWithDelta(50.841973, $result->getCoordinates()->getLatitude(), 0.00001);
+        $this->assertEqualsWithDelta(4.362288, $result->getCoordinates()->getLongitude(), 0.00001);
         $this->assertEquals('1', $result->getStreetNumber());
         $this->assertEquals('Place des Palais', $result->getStreetName());
         $this->assertEquals('1000', $result->getPostalCode());

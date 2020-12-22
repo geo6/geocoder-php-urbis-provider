@@ -33,7 +33,7 @@ class IntegrationTest extends ProviderIntegrationTest
 
     protected function createProvider(HttpClient $httpClient)
     {
-        return new UrbIS($httpClient, 'Geocoder PHP/UrbIS Provider/Integration Test');
+        return new UrbIS($httpClient);
     }
 
     protected function getCacheDir()
