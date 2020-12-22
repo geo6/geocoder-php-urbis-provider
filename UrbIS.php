@@ -107,14 +107,14 @@ final class UrbIS extends AbstractHttpProvider implements Provider
         $language = $query->getLocale() ?? '';
 
         $jsonQuery = [
-          'language' => $language,
-          'point'    => [
-              // x, y are switched in the API
-              'y' => $coordinates->getLongitude(),
-              'x' => $coordinates->getLatitude(),
-          ],
-          'SRS_In' => 4326,
-      ];
+            'language' => $language,
+            'point'    => [
+                // x, y are switched in the API
+                'y' => $coordinates->getLongitude(),
+                'x' => $coordinates->getLatitude(),
+            ],
+            'SRS_In' => 4326,
+        ];
 
         $url = sprintf(self::REVERSE_ENDPOINT_URL, urlencode(json_encode($jsonQuery)));
         $json = $this->executeQuery($url);
