@@ -12,7 +12,7 @@ namespace Geocoder\Provider\UrbIS\Tests;
 
 use Geocoder\IntegrationTest\ProviderIntegrationTest;
 use Geocoder\Provider\UrbIS\UrbIS;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 
 class IntegrationTest extends ProviderIntegrationTest
 {
@@ -31,7 +31,7 @@ class IntegrationTest extends ProviderIntegrationTest
         'testReverseQueryWithNoResults' => 'UrbIS provider returns "wrong" results!',
     ];
 
-    protected function createProvider(HttpClient $httpClient)
+    protected function createProvider(ClientInterface $httpClient)
     {
         return new UrbIS($httpClient);
     }
